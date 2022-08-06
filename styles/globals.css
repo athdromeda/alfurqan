@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito+Sans:wght@300;400&family=Playfair+Display:wght@400;500;600&display=swap');
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -15,12 +19,16 @@ a {
   box-sizing: border-box;
 }
 
+.arabic {
+  font-family: 'Amiri' ,serif;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
   body {
     color: white;
-    background: rgb(38, 41, 48);
+    background: #252b38;
   }
 }
