@@ -6,10 +6,39 @@ import Ayah from "../components/Ayah";
 import SurahHeader from "../components/SurahHeader";
 import Hero from "../components/Hero";
 
+const SurahContent = ({ readingMode, ayahs }) => {
+  return (
+    <>
+      {readingMode ? (
+        <section className="flex flex-row-reverse flex-wrap arabic justify-end text-xl leading-10 ml-3 mb-12" dir="rtl">{ayahs.map(ayah => ayah.text+' ۝  ')}</section>
+      ) : (
+        <section className={readingMode && "flex flex-row-reverse flex-wrap"}>
+          {ayahs.map((ayah, key) => (
+            <Ayah ayah={ayah} readingMode={readingMode} key={key} />
+          ))}
+        </section>
+      )}
+    </>
+  );
+};
+
+const Header = ({ readingMode, setReadingMode }) => {
+  return (
+    <header className="fixed top-0 flex py-8 px-12">
+      <img
+        src={readingMode ? "/align-right.svg" : "/align-justify.svg"}
+        className="cursor-pointer"
+        alt="reading mode"
+        onClick={() => setReadingMode((prev) => !prev)}
+      />
+    </header>
+  );
+};
 const baseURL = "http://api.alquran.cloud/v1/surah/";
 export default function Home() {
   const [surah, setSurah] = useState(null);
   const [spinner, setSpinner] = useState(true);
+  const [readingMode, setReadingMode] = useState(false);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -39,6 +68,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Header readingMode={readingMode} setReadingMode={setReadingMode} />
+
       <Hero handleForm={handleForm} handleQuery={setQuery} />
       <main className="p-8">
         {spinner ? (
@@ -46,9 +77,7 @@ export default function Home() {
         ) : (
           <>
             <SurahHeader data={surah.data} />
-            {surah.data.ayahs.map((ayah, key) => (
-              <Ayah ayah={ayah} key={key} />
-            ))}
+            <SurahContent readingMode={readingMode} ayahs={surah.data.ayahs} />
           </>
         )}
         <section className="flex justify-between font-nunito">
