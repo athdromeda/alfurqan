@@ -2,61 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-
-const Ayah = ({ ayah }) => {
-  return (
-    <section className="mb-8">
-      <div className="flex justify-between">
-      <p className="arabic text-right text-xl mb-4 mr-3">{ayah.numberInSurah}</p>
-      <p className="arabic text-right text-xl leading-10 mb-4">{ayah.text} ۝</p>
-      </div>
-      
-      <hr className="opacity-20"/>
-    </section>
-  );
-};
-
-const SurahTitle = ({ data }) => {
-  return (
-    <section className="text-center mb-8">
-      <h3 className="text-2xl font-arabic">{data.name}</h3>
-      <h4 className="font-nunito">{data.englishName + " | " + data.englishNameTranslation}</h4>
-    </section>
-  );
-};
-
-const Hero = ({ handleForm, handleQuery }) => {
-  const refQuery = useRef();
-
-  return (
-    <section
-      className={
-        styles.hero + " py-12 px-20 flex flex-col items-center justify-center h-1/3 font-nunito"
-      }
-    >
-      <p className="text-center text-4xl font-bold font-playfair">al Furqan</p>
-      <p className="text-center text-xl mb-8 font-bold">read al Quran from web</p>
-
-      <form
-        onSubmit={handleForm}
-        className="bg-white/10 hover:bg-white/20 p-3 rounded-md"
-      >
-        <input
-          ref={refQuery}
-          type="text"
-          className="bg-transparent  border-0 outline-none focus:outline-none"
-        />
-        <button
-          type="submit"
-          onClick={() => handleQuery(refQuery.current.value)}
-          className="px-4"
-        >
-          Cari
-        </button>
-      </form>
-    </section>
-  );
-};
+import Ayah from "../components/Ayah";
+import SurahHeader from "../components/SurahHeader";
+import Hero from "../components/Hero";
 
 const baseURL = "http://api.alquran.cloud/v1/surah/";
 export default function Home() {
@@ -73,9 +21,14 @@ export default function Home() {
 
   const handleForm = (e) => {
     e.preventDefault();
-    axios.get(baseURL + query).then((res) => {
-      setSurah(res.data);
-    });
+    axios
+      .get(baseURL + query)
+      .then((res) => {
+        setSurah(res.data);
+      })
+      .catch((err) => {
+        alert(err + ": Nomor surah harus berupa angka 1-114");
+      });
   };
 
   return (
@@ -92,7 +45,7 @@ export default function Home() {
           <h1>Loading...</h1>
         ) : (
           <>
-            <SurahTitle data={surah.data} />
+            <SurahHeader data={surah.data} />
             {surah.data.ayahs.map((ayah, key) => (
               <Ayah ayah={ayah} key={key} />
             ))}

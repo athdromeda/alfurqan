@@ -1,5 +1,6 @@
 .hero {
-  background-image: url('../public/hero-bg.svg');
+  background: url('../public/hero-bg.svg') top/100% no-repeat;
+  background-position: top;
 }
 
 @media (prefers-color-scheme: dark) {
