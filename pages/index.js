@@ -19,7 +19,7 @@ export default function Home() {
   const [readingMode, setReadingMode] = useState(false);
   const [query, setQuery] = useState("1");
 
-  const useQuery = () => {
+  const sendQuery = () => {
     setSpinner(true);
     axios
       .get(baseURL + query)
@@ -33,12 +33,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-    useQuery();
+    sendQuery();
   }, [query]);
 
   const handleForm = (e) => {
     e.preventDefault();
-    useQuery();
+    sendQuery();
   };
 
   return (
