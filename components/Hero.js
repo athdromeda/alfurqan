@@ -1,4 +1,4 @@
-import {useRef} from 'react'
+import { useRef } from "react";
 import styles from "../styles/Home.module.css";
 
 const Hero = ({ handleForm, handleQuery }) => {
@@ -28,10 +28,13 @@ const Hero = ({ handleForm, handleQuery }) => {
         />
         <button
           type="submit"
-          onClick={() => handleQuery(refQuery.current.value)}
+          onClick={() => {
+            handleQuery(refQuery.current.value);
+            refQuery.current.value = "";
+          }}
           className="px-4"
         >
-          Cari
+          Search
         </button>
       </form>
     </section>

@@ -2,62 +2,43 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import Ayah from "../components/Ayah";
 import SurahHeader from "../components/SurahHeader";
 import Hero from "../components/Hero";
+import SurahContent from "../components/SurahContent";
+import SurahFooter from "../components/SurahFooter";
+import Header from "../components/Header";
 
-const SurahContent = ({ readingMode, ayahs }) => {
-  return (
-    <>
-      {readingMode ? (
-        <section className="flex flex-row-reverse flex-wrap arabic justify-end text-xl leading-10 ml-3 mb-12" dir="rtl">{ayahs.map(ayah => ayah.text+' ۝  ')}</section>
-      ) : (
-        <section className={readingMode && "flex flex-row-reverse flex-wrap"}>
-          {ayahs.map((ayah, key) => (
-            <Ayah ayah={ayah} readingMode={readingMode} key={key} />
-          ))}
-        </section>
-      )}
-    </>
-  );
-};
-
-const Header = ({ readingMode, setReadingMode }) => {
-  return (
-    <header className="fixed top-0 flex py-8 px-12">
-      <img
-        src={readingMode ? "/align-right.svg" : "/align-justify.svg"}
-        className="cursor-pointer"
-        alt="reading mode"
-        onClick={() => setReadingMode((prev) => !prev)}
-      />
-    </header>
-  );
-};
 const baseURL = "http://api.alquran.cloud/v1/surah/";
+const Spinner = () => {
+  return <h1 className="text-center mt-16">Loading ...</h1>;
+};
+
 export default function Home() {
   const [surah, setSurah] = useState(null);
   const [spinner, setSpinner] = useState(true);
   const [readingMode, setReadingMode] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("1");
 
-  useEffect(() => {
-    axios.get(baseURL + "1").then((res) => {
-      setSurah(res.data);
-      setSpinner(false);
-    });
-  }, []);
-
-  const handleForm = (e) => {
-    e.preventDefault();
+  const useQuery = () => {
+    setSpinner(true);
     axios
       .get(baseURL + query)
       .then((res) => {
         setSurah(res.data);
+        setSpinner(false);
       })
       .catch((err) => {
         alert(err + ": Nomor surah harus berupa angka 1-114");
       });
+  };
+
+  useEffect(() => {
+    useQuery();
+  }, [query]);
+
+  const handleForm = (e) => {
+    e.preventDefault();
+    useQuery();
   };
 
   return (
@@ -73,17 +54,14 @@ export default function Home() {
       <Hero handleForm={handleForm} handleQuery={setQuery} />
       <main className="p-8">
         {spinner ? (
-          <h1>Loading...</h1>
+          <Spinner />
         ) : (
           <>
             <SurahHeader data={surah.data} />
             <SurahContent readingMode={readingMode} ayahs={surah.data.ayahs} />
+            <SurahFooter surah={surah.data.number} setQuery={setQuery} />
           </>
         )}
-        <section className="flex justify-between font-nunito">
-          <button>Selanjutnya</button>
-          <button>Sebelumnya</button>
-        </section>
       </main>
     </div>
   );
