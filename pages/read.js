@@ -2,32 +2,20 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import SurahHeader from "../components/SurahHeader";
 import Hero from "../components/Hero";
-import Jumbotron from "../components/Jumbotron";
+import SurahContent from "../components/SurahContent";
+import SurahFooter from "../components/SurahFooter";
 import Header from "../components/Header";
-import surahList from "./data";
 
 const baseURL = "http://api.alquran.cloud/v1/surah/";
-const SurahGrid = () => {
-  return (
-    <main className="p-8 flex flex-wrap items-center flex-row-reverse">
-      {surahList.map((e, i) => (
-        <section className="flex flex-wrap gap-3 bg-white/10 hover:bg-white/20 p-3 rounded-md m-3 cursor-pointer min-w-[50px]">
-          <p className="arabic">{e.name}</p>
-          <p className="arabic">{toArabicNum(i + 1)}</p>
-        </section>
-      ))}
-    </main>
-  );
+const Spinner = () => {
+  return <h1 className="text-center mt-16">Loading ...</h1>;
 };
 
-function toArabicNum(en) {
-  return ("" + en).replace(/[0-9]/g, function(t) {
-      return "٠١٢٣٤٥٦٧٨٩".slice(+t, +t+1);
-  });
-}
-export default function Home() {
-  const [spinner, setSpinner] = useState(false)
+export default function Read() {
+  const [surah, setSurah] = useState(null);
+  const [spinner, setSpinner] = useState(true);
   const [readingMode, setReadingMode] = useState(false);
   const [query, setQuery] = useState("1");
 
@@ -44,6 +32,10 @@ export default function Home() {
       });
   };
 
+  useEffect(() => {
+    sendQuery();
+  }, [query]);
+
   const handleForm = (e) => {
     e.preventDefault();
     sendQuery();
@@ -59,8 +51,18 @@ export default function Home() {
 
       <Header readingMode={readingMode} setReadingMode={setReadingMode} />
 
-      <Jumbotron handleForm={handleForm} handleQuery={setQuery} />
-      <SurahGrid />
+      <Hero handleForm={handleForm} handleQuery={setQuery} />
+      <main className="p-8">
+        {spinner ? (
+          <Spinner />
+        ) : (
+          <>
+            <SurahHeader data={surah.data} />
+            <SurahContent readingMode={readingMode} ayahs={surah.data.ayahs} />
+            <SurahFooter surah={surah.data.number} setQuery={setQuery} />
+          </>
+        )}
+      </main>
     </div>
   );
 }
