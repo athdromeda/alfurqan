@@ -40,7 +40,7 @@ export default function Surah({ surah }) {
   const [readingMode, setReadingMode] = useState(false);
   const [query, setQuery] = useState("1");
 
-  if(surah.data.ayahs){return null}
+  if(!surah.data.ayahs){return null}
 
   return (
     <div className={styles.container}>
