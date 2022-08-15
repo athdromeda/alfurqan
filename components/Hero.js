@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import styles from "../styles/Home.module.css";
 
-const Hero = ({ handleForm, handleQuery }) => {
+const Hero = ({ handleQuery }) => {
   const refQuery = useRef();
 
   return (
@@ -17,7 +17,7 @@ const Hero = ({ handleForm, handleQuery }) => {
       </p>
 
       <form
-        onSubmit={handleForm}
+        // onSubmit={handleForm}
         className="bg-white/10 hover:bg-white/20 p-3 rounded-md"
       >
         <input

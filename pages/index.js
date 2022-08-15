@@ -1,20 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import Hero from "../components/Hero";
 import Jumbotron from "../components/Jumbotron";
 import Header from "../components/Header";
-import surahList from "./data";
+import { useRouter } from "next/router";
 
-const baseURL = "http://api.alquran.cloud/v1/surah/";
-const SurahGrid = () => {
+const SurahGrid = ({data}) => {
+  const router = useRouter()
+
   return (
     <main className="p-8 flex flex-wrap items-center flex-row-reverse">
-      {surahList.map((e, i) => (
-        <section className="flex flex-wrap gap-3 bg-white/10 hover:bg-white/20 p-3 rounded-md m-3 cursor-pointer min-w-[50px]">
+      {data.map((e, i) => (
+        <section key={e.number} onClick={()=>router.push(`/surah/${e.number}`)} className="flex flex-wrap gap-3 bg-white/10 hover:bg-white/20 p-3 rounded-md m-3 cursor-pointer min-w-[50px]">
           <p className="arabic">{e.name}</p>
-          <p className="arabic">{toArabicNum(i + 1)}</p>
+          <p className="arabic">{toArabicNum(e.number)}</p>
         </section>
       ))}
     </main>
@@ -26,10 +26,13 @@ function toArabicNum(en) {
       return "٠١٢٣٤٥٦٧٨٩".slice(+t, +t+1);
   });
 }
-export default function Home() {
+export default function Home({surahs}) {
+  const [surah, setSurah] = useState(1)
   const [spinner, setSpinner] = useState(false)
   const [readingMode, setReadingMode] = useState(false);
   const [query, setQuery] = useState("1");
+
+  console.log(surahs)
 
   const sendQuery = () => {
     setSpinner(true);
@@ -38,9 +41,11 @@ export default function Home() {
       .then((res) => {
         setSurah(res.data);
         setSpinner(false);
+        console.log(res.data)
       })
       .catch((err) => {
         alert(err + ": Nomor surah harus berupa angka 1-114");
+        console.log(err)
       });
   };
 
@@ -60,7 +65,17 @@ export default function Home() {
       <Header readingMode={readingMode} setReadingMode={setReadingMode} />
 
       <Jumbotron handleForm={handleForm} handleQuery={setQuery} />
-      <SurahGrid />
+      <SurahGrid data={surahs.data}/>
     </div>
   );
+}
+
+export async function getStaticProps(){
+  const res = await fetch('http://api.alquran.cloud/v1/surah')
+  const surahs = await res.json();
+  return {
+      props:{
+          surahs
+      }
+  }
 }

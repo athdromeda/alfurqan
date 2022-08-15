@@ -1,9 +1,12 @@
-const SurahFooter = ({ surah, setQuery }) => {
+import { useRouter } from "next/router";
+
+const SurahFooter = ({ surahNumber }) => {
+  const router = useRouter();
   return (
     <section className="flex justify-between font-nunito">
       <button
-        className={surah == 114 ? "invisible" : "flex"}
-        onClick={() => setQuery((prev) => prev + 1)}
+        className={surahNumber == 114 ? "invisible" : "flex"}
+        onClick={() => router.push(`/surah/${surahNumber + 1}`)}
       >
         <picture>
           <img src="/arrow-left.svg" className="mr-4" alt="next surah" />
@@ -11,8 +14,8 @@ const SurahFooter = ({ surah, setQuery }) => {
         <p>NEXT</p>
       </button>
       <button
-        className={surah == 1 ? "invisible" : "flex"}
-        onClick={() => setQuery((prev) => prev - 1)}
+        className={surahNumber == 1 ? "invisible" : "flex"}
+        onClick={() => router.push(`/surah/${surahNumber - 1}`)}
       >
         <p>PREVIOUS</p>
         <picture>
