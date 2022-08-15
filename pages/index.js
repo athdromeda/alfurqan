@@ -32,8 +32,6 @@ export default function Home({surahs}) {
   const [readingMode, setReadingMode] = useState(false);
   const [query, setQuery] = useState("1");
 
-  console.log(surahs)
-
   const sendQuery = () => {
     setSpinner(true);
     axios
@@ -41,11 +39,9 @@ export default function Home({surahs}) {
       .then((res) => {
         setSurah(res.data);
         setSpinner(false);
-        console.log(res.data)
       })
       .catch((err) => {
         alert(err + ": Nomor surah harus berupa angka 1-114");
-        console.log(err)
       });
   };
 
