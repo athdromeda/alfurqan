@@ -40,7 +40,7 @@ export default function Surah({ surah }) {
   const [readingMode, setReadingMode] = useState(false);
   const [query, setQuery] = useState("1");
 
-  if(!surah.data.ayahs){return null}
+  if(!surah){return null}
 
   return (
     <div className={styles.container}>
@@ -54,9 +54,9 @@ export default function Surah({ surah }) {
 
       <Hero handleQuery={setQuery} />
       <main className="p-8">
-        <SurahHeader data={surah.data} />
-        <SurahContent readingMode={readingMode} ayahs={surah.data.ayahs} />
-        <SurahFooter surahNumber={surah.data.number} />
+        <SurahHeader surah={surah} />
+        <SurahContent readingMode={readingMode} surah={surah} />
+        <SurahFooter surah={surah} />
       </main>
     </div>
   );

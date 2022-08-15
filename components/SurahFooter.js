@@ -1,7 +1,10 @@
 import { useRouter } from "next/router";
 
-const SurahFooter = ({ surahNumber }) => {
+const SurahFooter = ({ surah }) => {
   const router = useRouter();
+  if (!surah.data) return null;
+  const surahNumber = surah.data.number;
+
   return (
     <section className="flex justify-between font-nunito">
       <button
