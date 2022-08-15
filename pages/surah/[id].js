@@ -55,8 +55,8 @@ export default function Surah({ surah }) {
       <Hero handleQuery={setQuery} />
       <main className="p-8">
         <SurahHeader surah={surah} />
-        <SurahContent readingMode={readingMode} surah={surah} />
-        <SurahFooter surah={surah} />
+        <SurahContent readingMode={readingMode} ayahs={surah.data?.ayahs} />
+        <SurahFooter surahNumber={surah.data?.number} />
       </main>
     </div>
   );
