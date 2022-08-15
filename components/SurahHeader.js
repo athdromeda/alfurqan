@@ -1,6 +1,5 @@
-const SurahHeader = ({ surah }) => {
-  if (!surah.data) return null;
-  const {name, englishName, englishNameTranslation} = surah.data;
+const SurahHeader = ({ header }) => {
+  const [name, englishName, englishNameTranslation] = header;
 
   return (
     <section className="text-center mb-8">
