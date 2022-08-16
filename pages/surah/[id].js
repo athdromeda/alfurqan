@@ -6,7 +6,6 @@ import Hero from "../../components/Hero";
 import SurahContent from "../../components/SurahContent";
 import SurahFooter from "../../components/SurahFooter";
 import Header from "../../components/Header";
-import { useRouter } from "next/router";
 
 export async function getStaticPaths() {
   const res = await fetch("http://api.alquran.cloud/v1/surah");
@@ -36,7 +35,6 @@ export async function getStaticProps(context) {
 }
 
 export default function Surah({ surah }) {
-  const router = useRouter;
   const [readingMode, setReadingMode] = useState(false);
   const [query, setQuery] = useState("1");
 
